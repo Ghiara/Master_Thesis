@@ -1,0 +1,467 @@
+tag: 400
+alg: ddpg
+learn: normal
+env: KukaReach-v1
+goal: interval
+graph: False
+route: False
+show_goals: 0
+play_path: None
+play_epoch: latest
+stop_hgg_threshold: 2
+n_x: 31
+n_y: 31
+n_z: 11
+gamma: 0.98
+clip_return: True
+eps_act: 0.3
+std_act: 0.2
+pi_lr: 0.001
+q_lr: 0.001
+act_l2: 1.0
+polyak: 0.95
+epoches: 20
+cycles: 20
+episodes: 50
+timesteps: 100
+train_batches: 20
+curriculum: False
+buffer_size: 5000
+buffer_type: energy
+rhg: False
+batch_size: 256
+warmup: 10000
+her: future
+her_ratio: 0.8
+pool_rule: full
+hgg_c: 3.0
+hgg_L: 5.0
+hgg_pool_size: 1000
+balance_sigma: 0.3
+balance_eta: 1000
+balance_tau: 0.005
+K: 8
+record: False
+save_acc: True
+num_vertices: [31, 31, 11]
+goal_based: True
+clip_return_l: -49.99999999999996
+clip_return_r: 0.0
+*** network initialization complete ***
+*** tester initialization complete ***
+2022-11-15 19:43:53 400
+ Epoch          0/20  
+ Cycle          0/20  
+ Episodes       50    
+ Timesteps      2500  
+ TimeCost(sec)  5.984 
+ Pi_q_loss            
+ Pi_l2_loss           
+ Q_loss               
+ Success        0.0   
+Saved as best policy to log/400-ddpg-KukaReach-v1-normal/!
+2022-11-15 19:43:59 400
+ Epoch          0/20  
+ Cycle          1/20  
+ Episodes       100   
+ Timesteps      5000  
+ TimeCost(sec)  5.798 
+ Pi_q_loss            
+ Pi_l2_loss           
+ Q_loss               
+ Success        0.0   
+2022-11-15 19:44:05 400
+ Epoch          0/20  
+ Cycle          2/20  
+ Episodes       150   
+ Timesteps      7500  
+ TimeCost(sec)  5.869 
+ Pi_q_loss            
+ Pi_l2_loss           
+ Q_loss               
+ Success        0.01  
+Saved as best policy to log/400-ddpg-KukaReach-v1-normal/!
+2022-11-15 19:44:11 400
+ Epoch          0/20  
+ Cycle          3/20  
+ Episodes       200   
+ Timesteps      10000 
+ TimeCost(sec)  6.162 
+ Pi_q_loss      0.703 
+ Pi_l2_loss     0.006 
+ Q_loss         0.245 
+ Success        0.02  
+Saved as best policy to log/400-ddpg-KukaReach-v1-normal/!
+2022-11-15 19:44:35 400
+ Epoch          0/20   
+ Cycle          4/20   
+ Episodes       250    
+ Timesteps      12500  
+ TimeCost(sec)  24.418 
+ Pi_q_loss      1.437  
+ Pi_l2_loss     0.08   
+ Q_loss         0.047  
+ Success        1.0    
+Saved as best policy to log/400-ddpg-KukaReach-v1-normal/!
+2022-11-15 19:44:59 400
+ Epoch          0/20   
+ Cycle          5/20   
+ Episodes       300    
+ Timesteps      15000  
+ TimeCost(sec)  23.353 
+ Pi_q_loss      1.667  
+ Pi_l2_loss     0.229  
+ Q_loss         0.025  
+ Success        1.0    
+2022-11-15 19:45:24 400
+ Epoch          0/20   
+ Cycle          6/20   
+ Episodes       350    
+ Timesteps      17500  
+ TimeCost(sec)  24.509 
+ Pi_q_loss      1.408  
+ Pi_l2_loss     0.238  
+ Q_loss         0.026  
+ Success        1.0    
+2022-11-15 19:45:47 400
+ Epoch          0/20   
+ Cycle          7/20   
+ Episodes       400    
+ Timesteps      20000  
+ TimeCost(sec)  23.543 
+ Pi_q_loss      1.186  
+ Pi_l2_loss     0.217  
+ Q_loss         0.025  
+ Success        1.0    
+2022-11-15 19:46:11 400
+ Epoch          0/20   
+ Cycle          8/20   
+ Episodes       450    
+ Timesteps      22500  
+ TimeCost(sec)  23.376 
+ Pi_q_loss      1.022  
+ Pi_l2_loss     0.199  
+ Q_loss         0.024  
+ Success        1.0    
+2022-11-15 19:46:35 400
+ Epoch          0/20   
+ Cycle          9/20   
+ Episodes       500    
+ Timesteps      25000  
+ TimeCost(sec)  24.113 
+ Pi_q_loss      0.917  
+ Pi_l2_loss     0.186  
+ Q_loss         0.023  
+ Success        1.0    
+2022-11-15 19:47:00 400
+ Epoch          0/20   
+ Cycle          10/20  
+ Episodes       550    
+ Timesteps      27500  
+ TimeCost(sec)  24.704 
+ Pi_q_loss      0.839  
+ Pi_l2_loss     0.176  
+ Q_loss         0.023  
+ Success        1.0    
+2022-11-15 19:47:23 400
+ Epoch          0/20   
+ Cycle          11/20  
+ Episodes       600    
+ Timesteps      30000  
+ TimeCost(sec)  23.529 
+ Pi_q_loss      0.782  
+ Pi_l2_loss     0.166  
+ Q_loss         0.022  
+ Success        1.0    
+2022-11-15 19:47:47 400
+ Epoch          0/20   
+ Cycle          12/20  
+ Episodes       650    
+ Timesteps      32500  
+ TimeCost(sec)  23.503 
+ Pi_q_loss      0.723  
+ Pi_l2_loss     0.159  
+ Q_loss         0.021  
+ Success        1.0    
+2022-11-15 19:48:10 400
+ Epoch          0/20   
+ Cycle          13/20  
+ Episodes       700    
+ Timesteps      35000  
+ TimeCost(sec)  23.621 
+ Pi_q_loss      0.685  
+ Pi_l2_loss     0.154  
+ Q_loss         0.02   
+ Success        1.0    
+2022-11-15 19:48:34 400
+ Epoch          0/20   
+ Cycle          14/20  
+ Episodes       750    
+ Timesteps      37500  
+ TimeCost(sec)  23.577 
+ Pi_q_loss      0.647  
+ Pi_l2_loss     0.146  
+ Q_loss         0.019  
+ Success        1.0    
+2022-11-15 19:48:58 400
+ Epoch          0/20   
+ Cycle          15/20  
+ Episodes       800    
+ Timesteps      40000  
+ TimeCost(sec)  23.731 
+ Pi_q_loss      0.619  
+ Pi_l2_loss     0.139  
+ Q_loss         0.019  
+ Success        1.0    
+2022-11-15 19:49:22 400
+ Epoch          0/20   
+ Cycle          16/20  
+ Episodes       850    
+ Timesteps      42500  
+ TimeCost(sec)  23.598 
+ Pi_q_loss      0.589  
+ Pi_l2_loss     0.133  
+ Q_loss         0.018  
+ Success        1.0    
+2022-11-15 19:49:46 400
+ Epoch          0/20   
+ Cycle          17/20  
+ Episodes       900    
+ Timesteps      45000  
+ TimeCost(sec)  24.599 
+ Pi_q_loss      0.572  
+ Pi_l2_loss     0.127  
+ Q_loss         0.018  
+ Success        1.0    
+2022-11-15 19:50:10 400
+ Epoch          0/20   
+ Cycle          18/20  
+ Episodes       950    
+ Timesteps      47500  
+ TimeCost(sec)  23.983 
+ Pi_q_loss      0.542  
+ Pi_l2_loss     0.124  
+ Q_loss         0.018  
+ Success        1.0    
+2022-11-15 19:50:35 400
+ Epoch          0/20  
+ Cycle          19/20 
+ Episodes       1000  
+ Timesteps      50000 
+ TimeCost(sec)  24.12 
+ Pi_q_loss      0.519 
+ Pi_l2_loss     0.122 
+ Q_loss         0.018 
+ Success        1.0   
+Saved periodic policy to log/400-ddpg-KukaReach-v1-normal/!
+2022-11-15 19:51:00 400
+ Epoch          1/20   
+ Cycle          0/20   
+ Episodes       1050   
+ Timesteps      52500  
+ TimeCost(sec)  25.024 
+ Pi_q_loss      0.504  
+ Pi_l2_loss     0.119  
+ Q_loss         0.018  
+ Success        1.0    
+2022-11-15 19:51:26 400
+ Epoch          1/20   
+ Cycle          1/20   
+ Episodes       1100   
+ Timesteps      55000  
+ TimeCost(sec)  25.558 
+ Pi_q_loss      0.489  
+ Pi_l2_loss     0.116  
+ Q_loss         0.018  
+ Success        1.0    
+2022-11-15 19:51:52 400
+ Epoch          1/20   
+ Cycle          2/20   
+ Episodes       1150   
+ Timesteps      57500  
+ TimeCost(sec)  26.089 
+ Pi_q_loss      0.473  
+ Pi_l2_loss     0.115  
+ Q_loss         0.018  
+ Success        1.0    
+2022-11-15 19:52:18 400
+ Epoch          1/20   
+ Cycle          3/20   
+ Episodes       1200   
+ Timesteps      60000  
+ TimeCost(sec)  25.861 
+ Pi_q_loss      0.457  
+ Pi_l2_loss     0.113  
+ Q_loss         0.017  
+ Success        1.0    
+2022-11-15 19:52:42 400
+ Epoch          1/20   
+ Cycle          4/20   
+ Episodes       1250   
+ Timesteps      62500  
+ TimeCost(sec)  23.951 
+ Pi_q_loss      0.45   
+ Pi_l2_loss     0.112  
+ Q_loss         0.017  
+ Success        1.0    
+2022-11-15 19:53:06 400
+ Epoch          1/20   
+ Cycle          5/20   
+ Episodes       1300   
+ Timesteps      65000  
+ TimeCost(sec)  24.096 
+ Pi_q_loss      0.447  
+ Pi_l2_loss     0.108  
+ Q_loss         0.017  
+ Success        1.0    
+2022-11-15 19:53:32 400
+ Epoch          1/20   
+ Cycle          6/20   
+ Episodes       1350   
+ Timesteps      67500  
+ TimeCost(sec)  25.789 
+ Pi_q_loss      0.426  
+ Pi_l2_loss     0.108  
+ Q_loss         0.017  
+ Success        0.96   
+2022-11-15 19:53:56 400
+ Epoch          1/20   
+ Cycle          7/20   
+ Episodes       1400   
+ Timesteps      70000  
+ TimeCost(sec)  24.154 
+ Pi_q_loss      0.416  
+ Pi_l2_loss     0.11   
+ Q_loss         0.017  
+ Success        1.0    
+2022-11-15 19:54:21 400
+ Epoch          1/20   
+ Cycle          8/20   
+ Episodes       1450   
+ Timesteps      72500  
+ TimeCost(sec)  25.045 
+ Pi_q_loss      0.4    
+ Pi_l2_loss     0.107  
+ Q_loss         0.017  
+ Success        1.0    
+2022-11-15 19:54:45 400
+ Epoch          1/20   
+ Cycle          9/20   
+ Episodes       1500   
+ Timesteps      75000  
+ TimeCost(sec)  24.269 
+ Pi_q_loss      0.393  
+ Pi_l2_loss     0.106  
+ Q_loss         0.016  
+ Success        1.0    
+2022-11-15 19:55:09 400
+ Epoch          1/20   
+ Cycle          10/20  
+ Episodes       1550   
+ Timesteps      77500  
+ TimeCost(sec)  23.976 
+ Pi_q_loss      0.381  
+ Pi_l2_loss     0.103  
+ Q_loss         0.016  
+ Success        1.0    
+2022-11-15 19:55:33 400
+ Epoch          1/20   
+ Cycle          11/20  
+ Episodes       1600   
+ Timesteps      80000  
+ TimeCost(sec)  23.942 
+ Pi_q_loss      0.38   
+ Pi_l2_loss     0.105  
+ Q_loss         0.017  
+ Success        1.0    
+2022-11-15 19:55:58 400
+ Epoch          1/20  
+ Cycle          12/20 
+ Episodes       1650  
+ Timesteps      82500 
+ TimeCost(sec)  24.04 
+ Pi_q_loss      0.392 
+ Pi_l2_loss     0.101 
+ Q_loss         0.016 
+ Success        1.0   
+2022-11-15 19:56:21 400
+ Epoch          1/20   
+ Cycle          13/20  
+ Episodes       1700   
+ Timesteps      85000  
+ TimeCost(sec)  23.881 
+ Pi_q_loss      0.386  
+ Pi_l2_loss     0.1    
+ Q_loss         0.016  
+ Success        1.0    
+2022-11-15 19:56:46 400
+ Epoch          1/20   
+ Cycle          14/20  
+ Episodes       1750   
+ Timesteps      87500  
+ TimeCost(sec)  24.283 
+ Pi_q_loss      0.366  
+ Pi_l2_loss     0.1    
+ Q_loss         0.016  
+ Success        1.0    
+2022-11-15 19:57:10 400
+ Epoch          1/20   
+ Cycle          15/20  
+ Episodes       1800   
+ Timesteps      90000  
+ TimeCost(sec)  24.075 
+ Pi_q_loss      0.357  
+ Pi_l2_loss     0.099  
+ Q_loss         0.016  
+ Success        1.0    
+2022-11-15 19:57:34 400
+ Epoch          1/20   
+ Cycle          16/20  
+ Episodes       1850   
+ Timesteps      92500  
+ TimeCost(sec)  24.246 
+ Pi_q_loss      0.356  
+ Pi_l2_loss     0.097  
+ Q_loss         0.016  
+ Success        1.0    
+2022-11-15 19:57:59 400
+ Epoch          1/20   
+ Cycle          17/20  
+ Episodes       1900   
+ Timesteps      95000  
+ TimeCost(sec)  24.903 
+ Pi_q_loss      0.348  
+ Pi_l2_loss     0.099  
+ Q_loss         0.017  
+ Success        1.0    
+2022-11-15 19:58:24 400
+ Epoch          1/20   
+ Cycle          18/20  
+ Episodes       1950   
+ Timesteps      97500  
+ TimeCost(sec)  24.337 
+ Pi_q_loss      0.339  
+ Pi_l2_loss     0.097  
+ Q_loss         0.015  
+ Success        1.0    
+2022-11-15 19:58:48 400
+ Epoch          1/20   
+ Cycle          19/20  
+ Episodes       2000   
+ Timesteps      100000 
+ TimeCost(sec)  24.161 
+ Pi_q_loss      0.33   
+ Pi_l2_loss     0.097  
+ Q_loss         0.015  
+ Success        1.0    
+Saved periodic policy to log/400-ddpg-KukaReach-v1-normal/!
+2022-11-15 19:59:13 400
+ Epoch          2/20   
+ Cycle          0/20   
+ Episodes       2050   
+ Timesteps      102500 
+ TimeCost(sec)  24.414 
+ Pi_q_loss      0.336  
+ Pi_l2_loss     0.095  
+ Q_loss         0.015  
+ Success        1.0    

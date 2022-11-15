@@ -1,0 +1,59 @@
+<mujoco model="example">
+    <!-- set some defaults for units and lighting -->
+    <compiler angle="radian" meshdir="meshes"/>
+
+    <!-- 导入STL文件 -->
+    <asset>
+        <mesh file="base.STL" />
+        <mesh file="link1.STL" />
+        <mesh file="link2.STL" />
+    </asset>
+
+    <!-- 定义所有模拟器组件 -->
+    <worldbody>
+        <!-- 灯光 -->
+        <light directional="true" pos="-0.5 0.5 3" dir="0 0 -1" />
+        <!-- 添加地板，这样我们就不会凝视深渊 -->
+        <geom name="floor" pos="0 0 0" size="1 1 1" type="plane" rgba="1 0.83 0.61 0.5"/>
+        <!-- the ABR Control Mujoco interface expects a hand mocap -->
+        <body name="hand" pos="0 0 0" mocap="true">
+            <geom type="box" size=".01 .02 .03" rgba="0 .9 0 .5" contype="2"/>
+        </body>
+
+        <!-- 构建串联机器人 -->
+        <body name="base" pos="0 0 0">
+            <geom name="link0" type="mesh" mesh="base" pos="0 0 0"/>
+            <inertial pos="0 0 0" mass="0" diaginertia="0 0 0"/>
+
+            <!-- nest each child piece inside the parent body tags -->
+            <body name="link1" pos="0 0 1">
+                <!-- this joint connects link1 to the base -->
+                <joint name="joint0" axis="0 0 1" pos="0 0 0"/>
+
+                <geom name="link1" type="mesh" mesh="link1" pos="0 0 0" euler="0 3.14 0"/>
+                <inertial pos="0 0 0" mass="0.75" diaginertia="1 1 1"/>
+
+                <body name="link2" pos="0 0 1">
+                    <!-- this joint connects link2 to link1 -->
+                    <joint name="joint1" axis="0 0 1" pos="0 0 0"/>
+
+                    <geom name="link2" type="mesh" mesh="link2" pos="0 0 0" euler="0 3.14 0"/>
+                    <inertial pos="0 0 0" mass="0.75" diaginertia="1 1 1"/>
+
+                    <!-- the ABR Control Mujoco interface uses the EE body to -->
+                    <!-- identify the end-effector point to control with OSC-->
+                    <body name="EE" pos="0 0.2 0.2">
+                        <inertial pos="0 0 0" mass="0" diaginertia="0 0 0" />
+                    </body>
+                </body>
+            </body>
+        </body>
+    </worldbody>
+
+    <!-- 定义关节上的执行器 -->
+    <actuator>
+        <motor name="joint0_motor" joint="joint0"/>
+        <motor name="joint1_motor" joint="joint1"/>
+    </actuator>
+
+</mujoco>

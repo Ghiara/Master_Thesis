@@ -4,7 +4,7 @@ from envs import goal_distance_obs
 from utils.tf_utils import get_vars, Normalizer
 from algorithm.replay_buffer import goal_based_process
 
-
+# model free, off-policy, actor-critic alogorithm
 class DDPG:
     def __init__(self, args):
         self.args = args
@@ -118,7 +118,9 @@ class DDPG:
     def step(self, obs, explore=False, test_info=False):
         if (not test_info) and (self.args.buffer.steps_counter < self.args.warmup):
             return np.random.uniform(-1, 1, size=self.args.acts_dims)
-        if self.args.goal_based: obs = goal_based_process(obs)
+        
+        if self.args.goal_based: 
+            obs = goal_based_process(obs)
 
         # eps-greedy exploration
         if explore and np.random.uniform() <= self.args.eps_act:
@@ -131,10 +133,14 @@ class DDPG:
         action = action[0]
 
         # uncorrelated gaussian explorarion
-        if explore: action += np.random.normal(0, self.args.std_act, size=self.args.acts_dims)
+        if explore: 
+            action += np.random.normal(0, self.args.std_act, size=self.args.acts_dims)
+        
         action = np.clip(action, -1, 1)
 
-        if test_info: return action, info
+        if test_info: 
+            return action, info
+        
         return action
 
     def step_batch(self, obs):
