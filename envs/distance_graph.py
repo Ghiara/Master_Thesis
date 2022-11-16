@@ -63,7 +63,7 @@ class DistanceGraph:
 
         self.n = self.n_x * self.n_y * self.n_z
 
-        # initialize obstacle_vertices matrix
+        # initialize obstacle_vertices matrix -> 环境+障碍栅格化为3维的（0,1）map
         # has size of the n_x x n_y x n_z, can be indexed by i,j,k
         # 0 entry means "no obstacle", 1 entry means "obstacle", at the corresponding vertex
 
@@ -130,7 +130,7 @@ class DistanceGraph:
         node = np.dot(gridpoint, self.hash)
         return int(node)
 
-    def vertex2gridpoint(self, vertex) -> (int, int, int):
+    def vertex2gridpoint(self, vertex):
         # converts vertex ID to gridpoint representation [i, j ,k]
         k = np.floor(vertex / (self.n_x * self.n_y))
         new = vertex % (self.n_x * self.n_y)
@@ -138,7 +138,7 @@ class DistanceGraph:
         i = vertex % self.n_x
         return i, j, k
 
-    def gridpoint2coords(self, gridpoint) -> (int, int, int):
+    def gridpoint2coords(self, gridpoint):
         # converts gridpoint representation [i, j, k] to coords representation [x, y, z]
         [i, j, k] = gridpoint
         x = self.x_min + i * self.dx
@@ -146,7 +146,7 @@ class DistanceGraph:
         z = self.z_min + k * self.dz
         return x, y, z
 
-    def coords2gridpoint(self, coords) -> (int, int, int):
+    def coords2gridpoint(self, coords):
         # converts coords representation [x, y, z] to gridpoint representation [i, j, k]
         [x, y, z] = coords
         if not (

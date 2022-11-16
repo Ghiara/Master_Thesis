@@ -7,6 +7,39 @@ from test import Tester
 from algorithm.replay_buffer import ReplayBuffer_Episodic, goal_based_process
 from envs.distance_graph import DistanceGraph
 
+'''
+Robotics_envs_id = [
+    'FetchReach-v1',
+    'FetchPush-v1',
+    'FetchSlide-v1',
+    'FetchPickAndPlace-v1',
+    'FetchPushNew-v1',
+    'FetchCurling-v1',
+    'FetchPushObstacle-v1',
+    'FetchPickObstacle-v1',
+    'FetchPushNoObstacle-v1',
+    'FetchPickNoObstacle-v1',
+    'FetchPushLabyrinth-v1',
+    'FetchPickAndThrow-v1',
+    'FetchPickAndSort-v1',
+    'HandManipulateBlock-v0',
+    'HandManipulateEgg-v0',
+    'HandManipulatePen-v0',
+    'HandReach-v0'
+]
+Kuka_envs_id = [
+    'KukaReach-v1',
+    'KukaPickAndPlaceObstacle-v1',
+    'KukaPickAndPlaceObstacle-v2',
+    'KukaPickNoObstacle-v1',
+    'KukaPickNoObstacle-v2',
+    'KukaPickThrow-v1',
+    'KukaPushLabyrinth-v1',
+    'KukaPushLabyrinth-v2',
+    'KukaPushSlide-v1',
+    'KukaPushNew-v1'
+]
+'''
 
 def create_graph_distance(env, args):
     field = env.env.env.adapt_dict["field"]
@@ -19,37 +52,41 @@ def create_graph_distance(env, args):
 
 
 def get_args():
-    parser = get_arg_parser()
+    '''
+    Get arguments from CLI + defaults
+    '''
+    parser = get_arg_parser()  # CLI I/O packages, return -> argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     parser.add_argument('--tag', help='terminal tag in logger', type=str, default='')
     parser.add_argument('--alg', help='backend algorithm', type=str, default='ddpg', choices=['ddpg', 'ddpg2'])
-    parser.add_argument('--learn', help='type of training method', type=str, default='hgg',
-                        choices=learner_collection.keys())
-
-    parser.add_argument('--env', help='gym env id', type=str, default='FetchReach-v1',
-                        choices=Robotics_envs_id + Kuka_envs_id)
+    parser.add_argument('--learn', help='type of training method', type=str, default='hgg', choices=learner_collection.keys())
+    parser.add_argument('--env', help='gym env id', type=str, default='FetchReach-v1', choices=Robotics_envs_id + Kuka_envs_id)
+    
     args, _ = parser.parse_known_args()
+    
     if args.env == 'HandReach-v0':
-        parser.add_argument('--goal', help='method of goal generation', type=str, default='reach',
-                            choices=['vanilla', 'reach'])
+        
+        parser.add_argument('--goal', help='method of goal generation', type=str, default='reach', choices=['vanilla', 'reach'])
+    
     else:
-        parser.add_argument('--goal', help='method of goal generation', type=str, default='interval',
-                            choices=['vanilla', 'fixobj', 'interval', 'custom'])
-        if args.env[:5] == 'fetch':
-            parser.add_argument('--init_offset', help='initial offset in fetch environments', type=np.float32,
-                                default=1.0)
-        elif args.env[:4] == 'Hand':
-            parser.add_argument('--init_rotation', help='initial rotation in hand environments', type=np.float32,
-                                default=0.25)
+        
+        parser.add_argument('--goal', help='method of goal generation', type=str, default='interval', choices=['vanilla', 'fixobj', 'interval', 'custom'])
+        
+        if args.env[:5] == 'fetch': # if first 5 letters are 'fetch'
+            
+            parser.add_argument('--init_offset', help='initial offset in fetch environments', type=np.float32, default=1.0)
+        
+        elif args.env[:4] == 'Hand': # if first 4 letters are 'Hand'
+            
+            parser.add_argument('--init_rotation', help='initial rotation in hand environments', type=np.float32, default=0.25)
+    
     parser.add_argument('--graph', help='g-hgg yes or no', type=str2bool, default=False)
     parser.add_argument('--route', help='use route to help hgg find target or not', type=str2bool, default=False)
     # route only for testing
     parser.add_argument('--show_goals', help='number of goals to show', type=np.int32, default=0)
     parser.add_argument('--play_path', help='path to meta_file directory for play', type=str, default=None)
     parser.add_argument('--play_epoch', help='epoch to play', type=str, default='latest')
-    parser.add_argument('--stop_hgg_threshold',
-                        help='threshold of goals inside goalspace, between 0 and 1, deactivated by default value 2!',
-                        type=np.float32, default=2)
+    parser.add_argument('--stop_hgg_threshold', help='threshold of goals inside goalspace, between 0 and 1, deactivated by default value 2!', type=np.float32, default=2)
 
     parser.add_argument('--n_x', help='number of vertices in x-direction for g-hgg', type=int, default=31)
     parser.add_argument('--n_y', help='number of vertices in y-direction for g-hgg', type=int, default=31)
@@ -58,20 +95,18 @@ def get_args():
     parser.add_argument('--gamma', help='discount factor', type=np.float32, default=0.98)
     parser.add_argument('--clip_return', help='whether to clip return value', type=str2bool, default=True)
     parser.add_argument('--eps_act', help='percentage of epsilon greedy explorarion', type=np.float32, default=0.3)
-    parser.add_argument('--std_act', help='standard deviation of uncorrelated gaussian explorarion', type=np.float32,
-                        default=0.2)
+    parser.add_argument('--std_act', help='standard deviation of uncorrelated gaussian explorarion', type=np.float32, default=0.2)
 
     parser.add_argument('--pi_lr', help='learning rate of policy network', type=np.float32, default=1e-3)
     parser.add_argument('--q_lr', help='learning rate of value network', type=np.float32, default=1e-3)
     parser.add_argument('--act_l2', help='quadratic penalty on actions', type=np.float32, default=1.0)
-    parser.add_argument('--polyak', help='interpolation factor in polyak averaging for DDPG', type=np.float32,
-                        default=0.95)
+    parser.add_argument('--polyak', help='interpolation factor in polyak averaging for DDPG', type=np.float32, default=0.95)
 
+    # define the training epochs num / episodes / timesteps etc.
     parser.add_argument('--epoches', help='number of epoches', type=np.int32, default=20)
     parser.add_argument('--cycles', help='number of cycles per epoch', type=np.int32, default=20)
     parser.add_argument('--episodes', help='number of episodes per cycle', type=np.int32, default=50)
-    parser.add_argument('--timesteps', help='number of timesteps per episode', type=np.int32,
-                        default=(50 if args.env[:5] == 'fetch' else 100))
+    parser.add_argument('--timesteps', help='number of timesteps per episode', type=np.int32, default=(50 if args.env[:5] == 'fetch' else 100))
     parser.add_argument('--train_batches', help='number of batches to train per episode', type=np.int32, default=20)
     parser.add_argument('--curriculum', type=str2bool, default=False)
 
@@ -83,26 +118,31 @@ def get_args():
                         default=False)
     parser.add_argument('--batch_size', help='size of sample batch', type=np.int32, default=256)
     parser.add_argument('--warmup', help='number of timesteps for buffer warmup', type=np.int32, default=10000)
-    parser.add_argument('--her', help='type of hindsight experience replay', type=str, default='future',
-                        choices=['none', 'final', 'future'])
+    parser.add_argument('--her', help='type of hindsight experience replay', type=str, default='future', choices=['none', 'final', 'future'])
     parser.add_argument('--her_ratio', help='ratio of hindsight experience replay', type=np.float32, default=0.8)
-    parser.add_argument('--pool_rule', help='rule of collecting achieved states', type=str, default='full',
-                        choices=['full', 'final'])
+    parser.add_argument('--pool_rule', help='rule of collecting achieved states', type=str, default='full', choices=['full', 'final'])
 
+    # Definition of constants & hyper-parameters
     parser.add_argument('--hgg_c', help='weight of initial distribution in flow learner', type=np.float32, default=3.0)
     parser.add_argument('--hgg_L', help='Lipschitz constant', type=np.float32, default=5.0)
     parser.add_argument('--hgg_pool_size', help='size of achieved trajectories pool', type=np.int32, default=1000)
-    parser.add_argument('--balance_sigma', help='balance parameters', type=np.float32, default=0.3)
-    parser.add_argument('--balance_eta', help='balance parameters', type=np.float32, default=1000)
-    parser.add_argument('--balance_tau', help='balance parameters', type=np.float32, default=0.005)
+    parser.add_argument('--balance_sigma', help='balance hyper-parameter used in wasserstein distance eq.(20)', type=np.float32, default=0.3)
+    parser.add_argument('--balance_eta', help='balance hyper-parameter used in wasserstein distance eq.(20)', type=np.float32, default=1000)
+    parser.add_argument('--balance_tau', help='balance hyper-parameter used in wasserstein distance eq.(20)', type=np.float32, default=0.005)
     parser.add_argument('--K', help='the number of sampling', type=np.int32, default=8)
     parser.add_argument('--record', help='record videos', type=bool, default=False)
 
     parser.add_argument('--save_acc', help='save successful rate', type=str2bool, default=True)
 
-    args = parser.parse_args()
+    # read the transported parameters using "args.parameterName"
+    args = parser.parse_args() 
+    
+    # graph vertice
     args.num_vertices = [args.n_x, args.n_y, args.n_z]
+    # env name
     args.goal_based = (args.env in (Robotics_envs_id + Kuka_envs_id))
+    # gamma_sum = 1.0 / (1.0 - args.gamma), 
+    # l = -gamma_sum, r = 0.0
     args.clip_return_l, args.clip_return_r = clip_return_range(args)
 
     logger_name = args.alg + '-' + args.env + '-' + args.learn
@@ -115,7 +155,7 @@ def get_args():
     if args.curriculum:
         logger_name = logger_name + '-curriculum'
 
-    args.logger = get_logger(logger_name)
+    args.logger = get_logger(logger_name) # self defined Logger object in os_utils.py
 
     for key, value in args.__dict__.items():
         if key != 'logger':
@@ -124,7 +164,10 @@ def get_args():
 
 
 def experiment_setup(args):
-    env = make_env(args)
+    '''
+    Set up learning environment including, gym env, ddpg agent, hgg/normal learner, tester
+    '''
+    env = make_env(args) # envs -> __init__() -> make_env(..)
     env_test = make_env(args)
     if args.goal_based:
         args.obs_dims = list(goal_based_process(env.reset()).shape)
@@ -138,10 +181,10 @@ def experiment_setup(args):
         args.graph = graph = None
 
     args.buffer = buffer = ReplayBuffer_Episodic(args)
-    args.learner = learner = create_learner(args)
-    args.agent = agent = create_agent(args)
+    args.learner = learner = create_learner(args) # Normal, HGG, Normal+GoalGAN
+    args.agent = agent = create_agent(args) # DDPG Agent
     args.logger.info('*** network initialization complete ***')
-    args.tester = tester = Tester(args)
+    args.tester = tester = Tester(args) # test accruacy epoch etc.
     args.logger.info('*** tester initialization complete ***')
     args.timesteps = env.max_episode_steps
 

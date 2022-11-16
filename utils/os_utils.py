@@ -52,6 +52,9 @@ def system_pause():
 
 
 def get_arg_parser():
+    '''
+    load CLI I/O management instance format: 'python file.py --tag value
+    '''
     return argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
 

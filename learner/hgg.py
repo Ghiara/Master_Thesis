@@ -97,6 +97,9 @@ class MatchSampler:
         return np.sqrt(np.sum(np.square(a - b)))
 
     def get_route_goal_distance(self, goal_a, goal_b):
+        '''
+        Warning: hard-code specially for args.env == 'FetchPickObstacle-v1'
+        '''
         r4 = np.array([1.3, 0.55, 0.4])
         if goal_a[1] < 0.75:
             return self.euler_dis(goal_a, r4)
@@ -124,6 +127,9 @@ class MatchSampler:
         return min(d1, d2)
 
     def add_noise(self, pre_goal, noise_std=None):
+        '''
+        Add normal(gaussian) noise to previous generated goals
+        '''
         goal = pre_goal.copy()
         dim = 2 if self.args.env[:5] == 'fetch' else self.dim
         if noise_std is None:
@@ -132,6 +138,9 @@ class MatchSampler:
         return goal.copy()
 
     def sample(self, idx):
+        '''
+        sampling the goals
+        '''
         if self.args.env[:5] == 'fetch':
             return self.add_noise(self.pool[idx])
         else:
@@ -174,26 +183,27 @@ class MatchSampler:
             self.match_lib.add(0, graph_id['achieved'][i], 1, 0)
         for i in range(len(achieved_pool)):
             for j in range(len(desired_goals)):
-
-                # use graph_goal_distance here!
+                ################################################
+                ######## use graph_goal_distance here! #########
+                ################################################
                 if self.args.graph:
                     size = achieved_pool[i].shape[0]
                     res_1 = np.zeros(size)
                     for k in range(size):
                         res_1[k] = self.get_graph_goal_distance(achieved_pool[i][k], desired_goals[j])
                     res = res_1 - achieved_value[i] / (self.args.hgg_L / self.max_dis / (1 - self.args.gamma))
+                
                 elif self.args.route and self.args.env == 'FetchPickObstacle-v1':
                     size = achieved_pool[i].shape[0]
                     res_1 = np.zeros(size)
                     for k in range(size):
                         res_1[k] = self.get_route_goal_distance(achieved_pool[i][k], desired_goals[j])
                     res = res_1 - achieved_value[i] / (self.args.hgg_L / self.max_dis / (1 - self.args.gamma))
+                
                 else:
-                    res = np.sqrt(np.sum(np.square(achieved_pool[i] - desired_goals[j]), axis=1)) - achieved_value[
-                        i] / (self.args.hgg_L / self.max_dis / (1 - self.args.gamma))  # that was original
+                    res = np.sqrt(np.sum(np.square(achieved_pool[i] - desired_goals[j]), axis=1)) - achieved_value[i] / (self.args.hgg_L / self.max_dis / (1 - self.args.gamma))  # that was original
 
-                match_dis = np.min(res) + goal_distance(achieved_pool[i][0], initial_goals[
-                    j]) * self.args.hgg_c  # distance of initial positions: take l2 norm_as before
+                match_dis = np.min(res) + goal_distance(achieved_pool[i][0], initial_goals[j]) * self.args.hgg_c  # distance of initial positions: take l2 norm_as before
                 match_idx = np.argmin(res)
 
                 edge = self.match_lib.add(graph_id['achieved'][i], graph_id['desired'][j], 1, c_double(match_dis))
@@ -215,6 +225,9 @@ class MatchSampler:
 
 
 class HGGLearner:
+    '''
+    modified as GC-HGG variance
+    '''
     def __init__(self, args):
         self.args = args
         self.env = make_env(args)
@@ -233,7 +246,21 @@ class HGGLearner:
         self.K = 1
 
     def learn(self, args, env, env_test, agent, buffer, write_goals=0):
-        # Actual learning cycle takes place here!
+        '''
+        Perform the learning iterations of the agent(DDPG) using GC-HGG
+        
+        Given inputs:
+            agent: DDPG off-policy RL Algorithm
+            sampler: curriculum-guided sampling strategy (refer same file above)
+            buffer: replay buffer for sampling goals
+            env: learning environment
+        Output:
+            goal_list: list of generated goals learned from progress
+
+        Progress:
+            1. initialization environment & goals
+            2. 
+        '''
         initial_goals = []
         desired_goals = []
         goal_list = []
@@ -262,6 +289,8 @@ class HGGLearner:
         test_goals = []
         inside = []
         left_dis_total = 0
+
+
         for i in range(args.episodes):
             obs = self.env_List[i].get_obs()
             init_state = obs['observation'].copy()
@@ -289,6 +318,7 @@ class HGGLearner:
             obs = self.env_List[i].get_obs()
             current = Trajectory(obs)
             trajectory = [obs['achieved_goal'].copy()]
+            
             for timestep in range(args.timesteps):
                 # get action from the ddpg policy
                 action = agent.step(obs, explore=True)
@@ -302,6 +332,7 @@ class HGGLearner:
                     break
             achieved_trajectories.append(np.array(trajectory))
             achieved_init_states.append(init_state)
+            
             # Trajectory is stored in replay buffer, replay buffer can be normal or EBP
             buffer.store_trajectory(current)
             agent.normalizer_update(buffer.sample_batch())
